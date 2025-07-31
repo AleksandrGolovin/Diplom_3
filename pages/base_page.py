@@ -15,45 +15,45 @@ class BasePage:
         "Перейти на страницу по адресу"
         self.driver.get(url)
 
-    def find_element_with_wait(self, locator):
+    def find_visible_element(self, locator):
         "Найти элемент на странице"
         try:
-            self.wait.until(ec.visibility_of_element_located(locator))
-            return self.driver.find_element(*locator)
+            element = self.wait.until(ec.visibility_of_element_located(locator))
+            return element
         except:
             return None
 
-    def click_to_element(self, locator):
-        "Кликнуть на элемент на странице"
-        link = self.wait.until(ec.element_to_be_clickable(locator))
+    def scroll_to_element(self, locator):
+        """Пролистать страницу до элемента"""
+        element = self.find_visible_element(locator)
         try:
-            self.driver.find_element(*locator).click()
+            actions = ActionChains(self.driver)
+            actions.move_to_element(element).perform()
         except:
-            self.driver.execute_script("arguments[0].click();", link)
+            self.driver.execute_script("arguments[0].scrollIntoView();", element)
+
+    def click_to_element(self, locator):
+        """Кликнуть на элемент на странице"""
+        element = self.wait.until(ec.element_to_be_clickable(locator))
+        self.scroll_to_element(locator)
+        try:
+            element.click()
+        except:
+            self.driver.execute_script("arguments[0].click();", element)
 
     def set_text_to_element(self, locator, text):
         "Передать текст в элемент ввода"
-        element = self.find_element_with_wait(locator)
+        element = self.find_visible_element(locator)
         if element:
             element.send_keys(text)
     
     def get_text_from_element(self, locator):
         "Получить текст элемента"
-        element = self.find_element_with_wait(locator)
+        element = self.find_visible_element(locator)
         if element:
             text = element.text
             return text
         return None
-
-    def scroll_to_element(self, locator):
-        "Пролистать страницу до элемента"
-        element = self.find_element_with_wait(locator)
-        if element:
-            try:
-                actions = ActionChains(self.driver)
-                actions.move_to_element(element).perform()
-            except:
-                self.driver.execute_script("arguments[0].scrollIntoView();", element)
         
     def switch_to_last_tab(self):
         "Переключиться на последнюю вкладку"
@@ -63,3 +63,15 @@ class BasePage:
     def wait_for_url(self, url_part):
         "Подождать загрузки URL, в котором содержится искомый фрагмент"
         self.wait.until(ec.url_contains(url_part))
+
+    def _verify_page_loaded(self):
+        """Метод для проверки загрузки страницы (требует переопределения)"""
+        pass
+
+    def is_page_loaded(self):
+        """Публичный метод для проверки загрузки страницы"""
+        try:
+            self._verify_page_loaded()
+            return True
+        except:
+            return False

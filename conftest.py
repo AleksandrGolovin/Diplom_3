@@ -1,6 +1,8 @@
 import pytest
 from selenium import webdriver
 from selenium.webdriver import FirefoxOptions, ChromeOptions
+from pages.login_page import LoginPage
+from pages.forgot_password_page import ForgotPasswordPage
 
 
 @pytest.fixture(params=['firefox', 'chrome'])
@@ -30,3 +32,11 @@ def driver(request):
     
     # Завершение работы драйвера
     driver_instance.quit() # type: ignore
+
+@pytest.fixture
+def login_page(driver):
+    return LoginPage(driver)
+
+@pytest.fixture
+def forgot_password_page(driver):
+    return ForgotPasswordPage(driver)

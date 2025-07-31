@@ -7,19 +7,23 @@ from data import URL
 
 
 class ForgotPasswordPage(BasePage):
-    def open_page(self):
+    def open(self):
         self.go_to_url(URL.FORGOT_PASSWORD_PAGE)
+        return self
     
     @allure.step('Клик на вопрос')
     def enter_email(self, email=None):
         email = email or generate_unique_email()
         self.set_text_to_element(ForgotPasswordPageLocators.INPUT_EMAIL, email)
         
-    def submit_restore(self):
+    def navigate_to_reset_password_page(self):
         self.click_to_element(ForgotPasswordPageLocators.BUTTON_SUBMIT_RESTORE)
-        return ResetPasswordPage(self.driver)
+        reset_password_page = ResetPasswordPage(self.driver)
+        if reset_password_page.is_page_loaded():
+            return reset_password_page
+        raise AssertionError
     
-    def check_forgot_password_page(self):
-        h2_password_restoring = self.find_element_with_wait(ForgotPasswordPageLocators.H2_PASSWORD_RESTORING)
-        button_sumbit_restore = self.find_element_with_wait(ForgotPasswordPageLocators.BUTTON_SUBMIT_RESTORE)
+    def _verify_page_loaded(self):
+        h2_password_restoring = self.find_visible_element(ForgotPasswordPageLocators.H2_PASSWORD_RESTORING)
+        button_sumbit_restore = self.find_visible_element(ForgotPasswordPageLocators.BUTTON_SUBMIT_RESTORE)
         return all([h2_password_restoring, button_sumbit_restore])
