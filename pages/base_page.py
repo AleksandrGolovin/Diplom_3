@@ -23,6 +23,17 @@ class BasePage:
         except:
             return None
 
+    def find_invisible_element(self, locator):
+        "Найти элемент на странице"
+        try:
+            element = self.wait.until(ec.presence_of_element_located(locator))
+            return element
+        except:
+            return None
+    
+    def wait_for_invisibility(self, locator):
+        self.wait.until(ec.invisibility_of_element_located(locator))
+    
     def scroll_to_element(self, locator):
         """Пролистать страницу до элемента"""
         element = self.find_visible_element(locator)

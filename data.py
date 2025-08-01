@@ -6,5 +6,3 @@ class URL:
     REGISTER_PAGE = 'https://stellarburgers.nomoreparties.site/register'
     FORGOT_PASSWORD_PAGE = 'https://stellarburgers.nomoreparties.site/forgot-password'
     RESET_PASSWORD_PAGE = 'https://stellarburgers.nomoreparties.site/reset-password'
-
-CREDENTIALS = ('ya@ne.ya', '111111')
