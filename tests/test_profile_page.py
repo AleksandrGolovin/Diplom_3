@@ -1,5 +1,4 @@
 import allure
-from data import CREDENTIALS
 
 
 @allure.title('Тестовые сценарии страницы профиля')

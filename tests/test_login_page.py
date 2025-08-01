@@ -1,5 +1,4 @@
 import allure
-from data import CREDENTIALS
 
 
 @allure.title('Тестовые сценарии страницы логина')
@@ -14,9 +13,11 @@ class TestLoginPage:
         
     @allure.title('Проверка перехода на страницу логина')
     @allure.description('')
-    def test_login_page_auth_success(self, login_page):
+    def test_login_page_auth_success(self, create_user, login_page):
+        email, password = create_user()
         login_page.open()
-        main_page = login_page.auth(*CREDENTIALS)
+        
+        main_page = login_page.auth(email, password)
         
         assert all([
             main_page.is_page_loaded(),  # Проверка загрузки главной страницы
