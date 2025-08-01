@@ -9,7 +9,7 @@ class TestLoginPage:
     def test_login_page_open_success(self, login_page):
         login_page.open()
         
-        assert login_page.is_page_loaded()
+        assert login_page.is_loaded()
         
     @allure.title('Проверка перехода на страницу логина')
     @allure.description('')
@@ -20,6 +20,6 @@ class TestLoginPage:
         main_page = login_page.auth(email, password)
         
         assert all([
-            main_page.is_page_loaded(),  # Проверка загрузки главной страницы
+            main_page.is_loaded(),  # Проверка загрузки главной страницы
             main_page.is_auth()  # Проверка наличия авторизации
         ])

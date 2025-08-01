@@ -1,7 +1,6 @@
 import allure
 from pages.base_page import BasePage
 from locators.profile_page_locators import ProfilePageLocators
-# from pages.login_page import LoginPage
 
 
 class ProfilePage(BasePage):

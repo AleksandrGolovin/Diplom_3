@@ -13,7 +13,7 @@ class TestProfilePage:
         
         profile_page = main_page.navigate_to_profile_page()
         
-        assert profile_page.is_page_loaded()
+        assert profile_page.is_loaded()
         
     @allure.title('Проверка перехода в историю заказов')
     @allure.description('')
@@ -37,4 +37,4 @@ class TestProfilePage:
         
         profile_page.logout()
         
-        assert login_page.is_page_loaded()
+        assert login_page.is_loaded()

@@ -6,3 +6,4 @@ class URL:
     REGISTER_PAGE = 'https://stellarburgers.nomoreparties.site/register'
     FORGOT_PASSWORD_PAGE = 'https://stellarburgers.nomoreparties.site/forgot-password'
     RESET_PASSWORD_PAGE = 'https://stellarburgers.nomoreparties.site/reset-password'
+    API_AUTH = 'https://stellarburgers.nomoreparties.site/api/auth'

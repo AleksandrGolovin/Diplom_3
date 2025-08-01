@@ -1,6 +1,5 @@
 import allure
 from pages.base_page import BasePage
-from pages.reset_password_page import ResetPasswordPage
 from locators.forgot_password_page_locator import ForgotPasswordPageLocators
 from helpers import generate_unique_email
 from data import URL
@@ -17,9 +16,10 @@ class ForgotPasswordPage(BasePage):
     def navigate_to_reset_password_page(self):
         self.click_to_element(ForgotPasswordPageLocators.BUTTON_SUBMIT_RESTORE)
         
-        reset_password_page = ResetPasswordPage(self.driver)
-        if reset_password_page.is_page_loaded():
-            return reset_password_page
+        from pages.reset_password_page import ResetPasswordPage
+        destination_page = ResetPasswordPage(self.driver)
+        if destination_page.is_loaded():
+            return destination_page
         raise AssertionError
     
     @allure.step('Проверка, что страница открылась')

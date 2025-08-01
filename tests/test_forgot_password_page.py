@@ -10,4 +10,4 @@ class TestForgotPasswordPage:
         login_page.open()
         forgot_password_page = login_page.navigate_to_forgot_password_page()
         
-        assert forgot_password_page.is_page_loaded()
+        assert forgot_password_page.is_loaded()

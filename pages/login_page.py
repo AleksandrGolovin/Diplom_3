@@ -1,7 +1,5 @@
 import allure
 from pages.base_page import BasePage
-from pages.forgot_password_page import ForgotPasswordPage
-from pages.main_page import MainPage
 from locators.login_page_locators import LoginPageLocators
 from data import URL
 
@@ -9,27 +7,29 @@ from data import URL
 class LoginPage(BasePage):
     BASE_URL = URL.LOGIN_PAGE
     
-    def auth(self, email, password) -> MainPage:
+    def auth(self, email, password):
         self.set_text_to_element(LoginPageLocators.INPUT_EMAIL, email)
         self.set_text_to_element(LoginPageLocators.INPUT_PASSWORD, password)
         return self.navigate_to_main_page()
     
     @allure.step('Переход на страницу восстановления пароля')
-    def navigate_to_forgot_password_page(self) -> ForgotPasswordPage:
+    def navigate_to_forgot_password_page(self):
         self.click_to_element(LoginPageLocators.LINK_RESTORE_PASSWORD)
         
-        forgot_password_page = ForgotPasswordPage(self.driver)
-        if forgot_password_page.is_page_loaded():
-            return forgot_password_page
+        from pages.forgot_password_page import ForgotPasswordPage
+        destination_page = ForgotPasswordPage(self.driver)
+        if destination_page.is_loaded():
+            return destination_page
         raise AssertionError
 
     @allure.step('Переход на главную страницу')
-    def navigate_to_main_page(self) -> MainPage:
+    def navigate_to_main_page(self):
         self.click_to_element(LoginPageLocators.BUTTON_LOGIN)
         
-        main_page = MainPage(self.driver)
-        if main_page.is_page_loaded():
-            return main_page
+        from pages.main_page import MainPage
+        destination_page = MainPage(self.driver)
+        if destination_page.is_loaded():
+            return destination_page
         raise AssertionError
     
     @allure.step('Проверка, что страница открылась')

@@ -29,7 +29,7 @@ class BasePage:
     def find_visible_element(self, locator):
         "Найти элемент на странице"
         try:
-            element = self.wait.until(ec.visibility_of_element_located(locator))
+            element = self.wait_for_visibility(locator)
             return element
         except:
             return None
@@ -42,8 +42,11 @@ class BasePage:
         except:
             return None
     
+    def wait_for_visibility(self, locator):
+        return self.wait.until(ec.visibility_of_element_located(locator))
+        
     def wait_for_invisibility(self, locator):
-        self.wait.until(ec.invisibility_of_element_located(locator))
+        return self.wait.until(ec.invisibility_of_element_located(locator))
     
     def scroll_to_element(self, locator):
         """Пролистать страницу до элемента"""
@@ -91,7 +94,7 @@ class BasePage:
         """Метод для проверки загрузки страницы (требует переопределения)"""
         return True
 
-    def is_page_loaded(self):
+    def is_loaded(self):
         """Публичный метод для проверки загрузки страницы"""
         try:
             self._verify_page_loaded()

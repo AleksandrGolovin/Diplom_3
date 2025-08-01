@@ -1,20 +1,102 @@
 import allure
+import random
 from pages.base_page import BasePage
-from pages.profile_page import ProfilePage
 from locators.main_page_locators import MainPageLocators
+from locators.general_locators import GeneralLocators
 from data import URL
 
 
 class MainPage(BasePage):
     BASE_URL = URL.MAIN_PAGE
     
-    @allure.step('Переход на страницу личного кабинета пароля')
-    def navigate_to_profile_page(self) -> ProfilePage:
-        self.click_to_element(MainPageLocators.LINK_PROFILE)
+    def get_random_ingredient_locator(self):
+        ingredient_locator = MainPageLocators.LINK_INGREDIENTS
+        ingredients = self.driver.find_elements(*ingredient_locator)
+        ingredients_count = len(ingredients)
+        if ingredients_count > 0:
+            index = random.randint(1, ingredients_count + 1)
+            random_locator = ingredient_locator[0], f'{ingredient_locator[1]}[{index}]'
+            # locator_by, locator_value = MainPageLocators.LINK_INGREDIENTS
+            # locator_value = f'{locator_value}[{index}]'
+            return random_locator
+        else:
+            raise AssertionError
+    
+    @allure.step('Нажатие на случайный ингредиент из списка')
+    def click_random_ingredient(self):
+        locator = self.get_random_ingredient_locator()
+        self.click_to_element(locator)
+        self.wait_for_visibility(locator)
+            
+    def is_details_popup_displayed(self):
+        try:
+            self.driver.find_element(*MainPageLocators.SECTION_INGREDIENT_DETAILS)
+            return True
+        except:
+            return False
+    
+    def close_details_popup(self):
+        self.click_to_element(MainPageLocators.BUTTON_POPUP_CLOSE)
+        self.wait_for_invisibility(MainPageLocators.SECTION_INGREDIENT_DETAILS)
+
+    @allure.step('Drag and Drop an element')
+    def drag_and_drop_element(self, locator_from, locator_to):
+        element_from = self.wait_for_visibility(locator_from)
+        element_to = self.wait_for_visibility(locator_to)
+        self.driver.execute_script(
+            """
+            var source = arguments[0];
+            var target = arguments[1];
+            var evt = document.createEvent("DragEvent");
+            evt.initMouseEvent("dragstart", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            source.dispatchEvent(evt);
+            evt = document.createEvent("DragEvent");
+            evt.initMouseEvent("dragenter", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            target.dispatchEvent(evt);
+            evt = document.createEvent("DragEvent");
+            evt.initMouseEvent("dragover", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            target.dispatchEvent(evt);
+            evt = document.createEvent("DragEvent");
+            evt.initMouseEvent("drop", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            target.dispatchEvent(evt);
+            evt = document.createEvent("DragEvent");
+            evt.initMouseEvent("dragend", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            source.dispatchEvent(evt);
+            """,
+        element_from,
+        element_to
+    )
+
+    def add_ingredient_to_order(self):
+        locator_from = self.get_random_ingredient_locator()
+        ingredint_count_locator = locator_from[0], f'{locator_from[1]}/div[1]/p'
+        ingredient_count_before = self.get_text_from_element(ingredint_count_locator)
+        locator_to = MainPageLocators.SECTION_CONSTRUCTOR_BASKET
+        self.drag_and_drop_element(locator_from, locator_to)
+        ingredient_count_after = self.get_text_from_element(ingredint_count_locator)
+        if ingredient_count_before and ingredient_count_after:
+            return int(ingredient_count_after) > int(ingredient_count_before)
+        else:
+            return False
+
+    @allure.step('Переход на страницу личного кабинета')
+    def navigate_to_profile_page(self):
+        self.click_to_element(GeneralLocators.LINK_PROFILE)
         
-        profile_page = ProfilePage(self.driver)
-        if profile_page.is_page_loaded():
-            return profile_page
+        from pages.profile_page import ProfilePage
+        destination_page = ProfilePage(self.driver)
+        if destination_page.is_loaded():
+            return destination_page
+        raise AssertionError
+    
+    @allure.step('Переход на страницу ленты заказов')
+    def navigate_to_order_feed_page(self):
+        self.click_to_element(GeneralLocators.LINK_ORDER_FEED)
+        
+        from pages.order_feed_page import OrderFeedPage
+        destination_page = OrderFeedPage(self.driver)
+        if destination_page.is_loaded():
+            return destination_page
         raise AssertionError
     
     def is_auth(self):
@@ -25,6 +107,6 @@ class MainPage(BasePage):
     @allure.step('Проверка, что страница открылась')
     def _verify_page_loaded(self):
         conditions = [
-            self.find_visible_element(MainPageLocators.LINK_CONSTRUCTOR)
+            self.find_visible_element(MainPageLocators.LINK_CONSTRUCTOR_ACTIVE)
         ]
         return all(conditions)

@@ -5,7 +5,9 @@ from selenium.webdriver import FirefoxOptions, ChromeOptions
 from pages.login_page import LoginPage
 from pages.forgot_password_page import ForgotPasswordPage
 from pages.main_page import MainPage
+from pages.order_feed_page import OrderFeedPage
 from helpers import generate_unique_email
+from data import URL
 
 
 @pytest.fixture(params=['firefox', 'chrome'])
@@ -49,6 +51,10 @@ def main_page(driver):
     return MainPage(driver)
 
 @pytest.fixture
+def order_feed_page(driver):
+    return OrderFeedPage(driver)
+
+@pytest.fixture
 def create_user():
     """
     Фикстура для создания пользователя и его последующего удаления
@@ -70,7 +76,7 @@ def create_user():
         
         # Делаем запрос на создание
         response = requests.post(
-            url=f'https://stellarburgers.nomoreparties.site/api/auth/register',
+            url=f'{URL.API_AUTH}/register',
             json=payload
         )
 
@@ -88,13 +94,13 @@ def create_user():
             "password": password
         }
         response = requests.post(
-            url=f'https://stellarburgers.nomoreparties.site/api/auth/login',
+            url=f'{URL.API_AUTH}/login',
             json=payload
         )
         if response.status_code == 200:
             access_token = response.json()["accessToken"]
             headers = {"Authorization": f"{access_token}"}
             response = requests.delete(
-                url=f'https://stellarburgers.nomoreparties.site/api/auth/user',
+                url=f'{URL.API_AUTH}/user',
                 headers=headers
             )

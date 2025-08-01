@@ -11,7 +11,7 @@ class TestResetPasswordPage:
         forgot_password_page.enter_email()
         reset_password_page = forgot_password_page.navigate_to_reset_password_page()
         
-        assert reset_password_page.is_page_loaded()
+        assert reset_password_page.is_loaded()
         
     @allure.title('Проверка активации окна ввода при нажатии кнопки отображения пароля')
     @allure.description('')
