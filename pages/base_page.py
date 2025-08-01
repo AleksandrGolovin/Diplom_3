@@ -26,11 +26,12 @@ class BasePage:
     def scroll_to_element(self, locator):
         """Пролистать страницу до элемента"""
         element = self.find_visible_element(locator)
-        try:
-            actions = ActionChains(self.driver)
-            actions.move_to_element(element).perform()
-        except:
-            self.driver.execute_script("arguments[0].scrollIntoView();", element)
+        if element:
+            try:
+                actions = ActionChains(self.driver)
+                actions.move_to_element(element).perform()
+            except:
+                self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     def click_to_element(self, locator):
         """Кликнуть на элемент на странице"""
@@ -64,9 +65,9 @@ class BasePage:
         "Подождать загрузки URL, в котором содержится искомый фрагмент"
         self.wait.until(ec.url_contains(url_part))
 
-    def _verify_page_loaded(self):
+    def _verify_page_loaded(self) -> bool:
         """Метод для проверки загрузки страницы (требует переопределения)"""
-        pass
+        return True
 
     def is_page_loaded(self):
         """Публичный метод для проверки загрузки страницы"""

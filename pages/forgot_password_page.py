@@ -18,6 +18,7 @@ class ForgotPasswordPage(BasePage):
         
     def navigate_to_reset_password_page(self):
         self.click_to_element(ForgotPasswordPageLocators.BUTTON_SUBMIT_RESTORE)
+        
         reset_password_page = ResetPasswordPage(self.driver)
         if reset_password_page.is_page_loaded():
             return reset_password_page

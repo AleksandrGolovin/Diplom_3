@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver import FirefoxOptions, ChromeOptions
 from pages.login_page import LoginPage
 from pages.forgot_password_page import ForgotPasswordPage
+from pages.main_page import MainPage
 
 
 @pytest.fixture(params=['firefox', 'chrome'])
@@ -40,3 +41,7 @@ def login_page(driver):
 @pytest.fixture
 def forgot_password_page(driver):
     return ForgotPasswordPage(driver)
+
+@pytest.fixture
+def main_page(driver):
+    return MainPage(driver)
