@@ -5,11 +5,22 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 
 class BasePage:
-    "Базовая страница для наследования остальными страницами типовых методов"
+    """
+    Базовая страница для наследования остальными страницами типовых методов
+    """
+    BASE_URL = None
+    
     def __init__(self, driver: WebDriver):
         self.driver = driver
         self.timeout = 5
         self.wait = WebDriverWait(self.driver, self.timeout)
+
+    def open(self):
+        """Открыть базовую страницу"""
+        if self.BASE_URL:
+            self.go_to_url(self.BASE_URL)
+        else:
+            raise UnboundLocalError
 
     def go_to_url(self, url):
         "Перейти на страницу по адресу"

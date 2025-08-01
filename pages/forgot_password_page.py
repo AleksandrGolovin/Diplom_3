@@ -7,9 +7,7 @@ from data import URL
 
 
 class ForgotPasswordPage(BasePage):
-    def open(self):
-        self.go_to_url(URL.FORGOT_PASSWORD_PAGE)
-        return self
+    BASE_URL = URL.FORGOT_PASSWORD_PAGE
     
     @allure.step('Клик на вопрос')
     def enter_email(self, email=None):
@@ -24,7 +22,10 @@ class ForgotPasswordPage(BasePage):
             return reset_password_page
         raise AssertionError
     
+    @allure.step('Проверка, что страница открылась')
     def _verify_page_loaded(self):
-        h2_password_restoring = self.find_visible_element(ForgotPasswordPageLocators.H2_PASSWORD_RESTORING)
-        button_sumbit_restore = self.find_visible_element(ForgotPasswordPageLocators.BUTTON_SUBMIT_RESTORE)
-        return all([h2_password_restoring, button_sumbit_restore])
+        conditions = [
+            self.find_visible_element(ForgotPasswordPageLocators.H2_PASSWORD_RESTORING),
+            self.find_visible_element(ForgotPasswordPageLocators.BUTTON_SUBMIT_RESTORE)
+        ]
+        return all(conditions)

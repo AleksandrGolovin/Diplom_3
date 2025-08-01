@@ -7,9 +7,7 @@ from data import URL
 
 
 class LoginPage(BasePage):
-    def open(self):
-        self.go_to_url(URL.LOGIN_PAGE)
-        return self
+    BASE_URL = URL.LOGIN_PAGE
     
     def auth(self, email, password) -> MainPage:
         self.set_text_to_element(LoginPageLocators.INPUT_EMAIL, email)
@@ -34,7 +32,7 @@ class LoginPage(BasePage):
             return main_page
         raise AssertionError
     
-    @allure.step('Проверка, что на странице есть заголовок входа')
+    @allure.step('Проверка, что страница открылась')
     def _verify_page_loaded(self):
         conditions = [
             self.find_visible_element(LoginPageLocators.H2_LOGIN_TITLE)

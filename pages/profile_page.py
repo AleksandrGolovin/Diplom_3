@@ -5,14 +5,7 @@ from locators.profile_page_locators import ProfilePageLocators
 
 
 class ProfilePage(BasePage):
-      
-    @allure.step('Проверка, что на странице есть текст подсказки профиля')
-    def _verify_page_loaded(self):
-        conditions = [
-            self.find_visible_element(ProfilePageLocators.TEXT_PROFILE_HINT)
-        ]
-        return all(conditions)
-    
+
     @allure.step('Показать историю заказов')
     def show_orders_history(self):
         self.click_to_element(ProfilePageLocators.LINK_HISTORY)
@@ -27,3 +20,10 @@ class ProfilePage(BasePage):
     @allure.step('Показать историю заказов')
     def logout(self):
         self.click_to_element(ProfilePageLocators.BUTTON_LOGOUT)
+        
+    @allure.step('Проверка, что страница открылась')
+    def _verify_page_loaded(self):
+        conditions = [
+            self.find_visible_element(ProfilePageLocators.TEXT_PROFILE_HINT)
+        ]
+        return all(conditions)

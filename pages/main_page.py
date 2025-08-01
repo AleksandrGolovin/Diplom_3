@@ -6,13 +6,7 @@ from data import URL
 
 
 class MainPage(BasePage):
-    def open(self):
-        self.go_to_url(URL.MAIN_PAGE)
-        return self
-    
-    def _verify_page_loaded(self):
-        link_constructor_active = self.find_visible_element(MainPageLocators.LINK_CONSTRUCTOR)
-        return all([link_constructor_active])
+    BASE_URL = URL.MAIN_PAGE
     
     @allure.step('Переход на страницу личного кабинета пароля')
     def navigate_to_profile_page(self) -> ProfilePage:
@@ -27,3 +21,10 @@ class MainPage(BasePage):
         if self.find_visible_element(MainPageLocators.BUTTON_CREATE_ORDER):
             return True
         return False
+    
+    @allure.step('Проверка, что страница открылась')
+    def _verify_page_loaded(self):
+        conditions = [
+            self.find_visible_element(MainPageLocators.LINK_CONSTRUCTOR)
+        ]
+        return all(conditions)
