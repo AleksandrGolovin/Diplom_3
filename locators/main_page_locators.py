@@ -8,3 +8,6 @@ class MainPageLocators:
     SECTION_INGREDIENT_DETAILS = By.XPATH, ".//section[contains(@class, 'Modal_modal_opened')]"
     SECTION_CONSTRUCTOR_BASKET = By.XPATH, ".//section[contains(@class, 'BurgerConstructor_basket')]"
     BUTTON_POPUP_CLOSE = By.XPATH, ".//section[contains(@class, 'Modal_modal_opened')]//button"
+    IMG_LOADING_ANIMATION = By.XPATH, ".//img[@alt='loading animation']"
+    IMG_TICK_ANIMATION = By.XPATH, ".//img[@alt='tick animation']"
+    H2_ORDER_NUMBER_TITLE = By.XPATH, ".//p[text()='идентификатор заказа']/preceding-sibling::h2"

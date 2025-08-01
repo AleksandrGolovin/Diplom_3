@@ -37,6 +37,19 @@ class TestMainPage:
     def test_main_page_add_ingredient_increased_count(self, main_page):
         main_page.open()
         
-        is_success = main_page.add_ingredient_to_order()
+        is_success = main_page.add_ingredient_to_order('bun')
         
         assert is_success
+
+    @allure.title('Проверка создания заказа')
+    @allure.description('')
+    def test_main_page_create_order_auth_success(self, create_user, login_page):
+        email, password = create_user()
+        login_page.open()        
+        main_page = login_page.auth(email, password)
+        is_success, order_number = main_page.create_new_order()
+
+        assert all([
+            is_success,  # По таймауту может не успеть?
+            order_number != '9999'  # Есть вероятность, что еще раз счетчик перейдет 9999?
+        ])

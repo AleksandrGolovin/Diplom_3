@@ -9,12 +9,18 @@ from data import URL
 class MainPage(BasePage):
     BASE_URL = URL.MAIN_PAGE
     
-    def get_random_ingredient_locator(self):
+    def _get_random_ingredient_locator(self, type='bun'):
         ingredient_locator = MainPageLocators.LINK_INGREDIENTS
         ingredients = self.driver.find_elements(*ingredient_locator)
         ingredients_count = len(ingredients)
         if ingredients_count > 0:
-            index = random.randint(1, ingredients_count + 1)
+            index = 0
+            if type == 'bun':
+                index = random.randint(1, 2)
+            elif type == 'ingredient':
+                index = random.randint(3, ingredients_count + 1)
+            else:
+                raise TypeError
             random_locator = ingredient_locator[0], f'{ingredient_locator[1]}[{index}]'
             # locator_by, locator_value = MainPageLocators.LINK_INGREDIENTS
             # locator_value = f'{locator_value}[{index}]'
@@ -24,7 +30,7 @@ class MainPage(BasePage):
     
     @allure.step('Нажатие на случайный ингредиент из списка')
     def click_random_ingredient(self):
-        locator = self.get_random_ingredient_locator()
+        locator = self._get_random_ingredient_locator('ingredient')
         self.click_to_element(locator)
         self.wait_for_visibility(locator)
             
@@ -42,6 +48,7 @@ class MainPage(BasePage):
     @allure.step('Drag and Drop an element')
     def drag_and_drop_element(self, locator_from, locator_to):
         element_from = self.wait_for_visibility(locator_from)
+        self.scroll_to_element(locator_from)
         element_to = self.wait_for_visibility(locator_to)
         self.driver.execute_script(
             """
@@ -67,8 +74,8 @@ class MainPage(BasePage):
         element_to
     )
 
-    def add_ingredient_to_order(self):
-        locator_from = self.get_random_ingredient_locator()
+    def add_ingredient_to_order(self, type='bun'):
+        locator_from = self._get_random_ingredient_locator(type)
         ingredint_count_locator = locator_from[0], f'{locator_from[1]}/div[1]/p'
         ingredient_count_before = self.get_text_from_element(ingredint_count_locator)
         locator_to = MainPageLocators.SECTION_CONSTRUCTOR_BASKET
@@ -78,6 +85,19 @@ class MainPage(BasePage):
             return int(ingredient_count_after) > int(ingredient_count_before)
         else:
             return False
+
+    def create_new_order(self):
+        self.add_ingredient_to_order('bun')
+        self.add_ingredient_to_order('ingredient')
+        self.click_to_element(MainPageLocators.BUTTON_CREATE_ORDER)
+        self.wait_for_visibility(MainPageLocators.IMG_TICK_ANIMATION)
+        number_locator = MainPageLocators.H2_ORDER_NUMBER_TITLE
+        order_number_default = self.get_text_from_element(number_locator)
+        try:
+            self.wait.until_not(lambda d: self.get_text_from_element(number_locator) == order_number_default)
+            return True, self.get_text_from_element(number_locator)
+        except:
+            return False, self.get_text_from_element(number_locator)
 
     @allure.step('Переход на страницу личного кабинета')
     def navigate_to_profile_page(self):
