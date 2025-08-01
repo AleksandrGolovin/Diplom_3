@@ -6,7 +6,7 @@ class TestResetPasswordPage:
     
     @allure.title('Проверка ввода почты и клика по кнопке подтверждения восстановления пароля')
     @allure.description('')
-    def test_enter_email_and_submit_success(self, forgot_password_page):
+    def test_reset_password_enter_email_and_submit_success(self, forgot_password_page):
         forgot_password_page.open()
         forgot_password_page.enter_email()
         reset_password_page = forgot_password_page.navigate_to_reset_password_page()
@@ -15,7 +15,7 @@ class TestResetPasswordPage:
         
     @allure.title('Проверка активации окна ввода при нажатии кнопки отображения пароля')
     @allure.description('')
-    def test_password_input_activate_by_click_success(self, forgot_password_page):
+    def test_reset_password_show_password_input_activate_by_click_success(self, forgot_password_page):
         forgot_password_page.open()
         forgot_password_page.enter_email()
         reset_password_page = forgot_password_page.navigate_to_reset_password_page()

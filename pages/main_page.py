@@ -22,3 +22,8 @@ class MainPage(BasePage):
         if profile_page.is_page_loaded():
             return profile_page
         raise AssertionError
+    
+    def is_auth(self):
+        if self.find_visible_element(MainPageLocators.BUTTON_CREATE_ORDER):
+            return True
+        return False
