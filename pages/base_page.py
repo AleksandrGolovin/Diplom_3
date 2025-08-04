@@ -12,7 +12,7 @@ class BasePage:
     
     def __init__(self, driver: WebDriver):
         self.driver = driver
-        self.timeout = 5
+        self.timeout = 10
         self.wait = WebDriverWait(self.driver, self.timeout)
 
     def open(self):

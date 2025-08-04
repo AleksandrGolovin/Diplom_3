@@ -11,6 +11,7 @@ class MainPage(BasePage):
     
     def _get_random_ingredient_locator(self, type='bun'):
         ingredient_locator = MainPageLocators.LINK_INGREDIENTS
+        self.wait_for_visibility(ingredient_locator)
         ingredients = self.driver.find_elements(*ingredient_locator)
         ingredients_count = len(ingredients)
         if ingredients_count > 0:
@@ -18,12 +19,10 @@ class MainPage(BasePage):
             if type == 'bun':
                 index = random.randint(1, 2)
             elif type == 'ingredient':
-                index = random.randint(3, ingredients_count + 1)
+                index = random.randint(3, ingredients_count)
             else:
                 raise TypeError
             random_locator = ingredient_locator[0], f'{ingredient_locator[1]}[{index}]'
-            # locator_by, locator_value = MainPageLocators.LINK_INGREDIENTS
-            # locator_value = f'{locator_value}[{index}]'
             return random_locator
         else:
             raise AssertionError
@@ -31,8 +30,8 @@ class MainPage(BasePage):
     @allure.step('Нажатие на случайный ингредиент из списка')
     def click_random_ingredient(self):
         locator = self._get_random_ingredient_locator('ingredient')
-        self.click_to_element(locator)
         self.wait_for_visibility(locator)
+        self.click_to_element(locator)
             
     def is_details_popup_displayed(self):
         try:
@@ -88,6 +87,7 @@ class MainPage(BasePage):
             raise AssertionError
 
     def create_new_order(self, ingredient_count = 1):
+        
         self.add_ingredient_to_order('bun')
         for i in range(ingredient_count):
             self.add_ingredient_to_order('ingredient')
@@ -97,7 +97,9 @@ class MainPage(BasePage):
         order_number_default = self.get_text_from_element(number_locator)
         try:
             self.wait.until_not(lambda d: self.get_text_from_element(number_locator) == order_number_default)
-            return True, self.get_text_from_element(number_locator)
+            result = True, self.get_text_from_element(number_locator)
+            self.close_details_popup()
+            return result
         except:
             return False, self.get_text_from_element(number_locator)
 

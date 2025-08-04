@@ -6,6 +6,7 @@ from pages.login_page import LoginPage
 from pages.forgot_password_page import ForgotPasswordPage
 from pages.main_page import MainPage
 from pages.order_feed_page import OrderFeedPage
+from pages.profile_page import ProfilePage
 from helpers import generate_unique_email
 from data import URL
 
@@ -41,6 +42,10 @@ def driver(request):
 @pytest.fixture
 def login_page(driver):
     return LoginPage(driver)
+
+@pytest.fixture
+def profile_page(driver):
+    return ProfilePage(driver)
 
 @pytest.fixture
 def forgot_password_page(driver):
