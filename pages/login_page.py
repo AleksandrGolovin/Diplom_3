@@ -7,12 +7,13 @@ from data import URL
 class LoginPage(BasePage):
     BASE_URL = URL.LOGIN_PAGE
     
+    @allure.step('Авторизация пользователя по email и password')
     def auth(self, email, password):
         self.set_text_to_element(LoginPageLocators.INPUT_EMAIL, email)
         self.set_text_to_element(LoginPageLocators.INPUT_PASSWORD, password)
         return self.navigate_to_main_page()
     
-    @allure.step('Переход на страницу восстановления пароля')
+    @allure.step('Переход на страницу восстановления пароля по клику на ссылку восстановления пароля')
     def navigate_to_forgot_password_page(self):
         self.click_to_element(LoginPageLocators.LINK_RESTORE_PASSWORD)
         
@@ -22,7 +23,7 @@ class LoginPage(BasePage):
             return destination_page
         raise AssertionError
 
-    @allure.step('Переход на главную страницу')
+    @allure.step('Переход на главную страницу по клику на кнопку входа по логину-паролю')
     def navigate_to_main_page(self):
         self.click_to_element(LoginPageLocators.BUTTON_LOGIN)
         

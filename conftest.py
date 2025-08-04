@@ -1,5 +1,6 @@
 import pytest
 import requests
+import allure
 from selenium import webdriver
 from selenium.webdriver import FirefoxOptions, ChromeOptions
 from pages.login_page import LoginPage
@@ -11,6 +12,7 @@ from helpers import generate_unique_email
 from data import URL
 
 
+@allure.step('Фикстура: инициализация драйвера браузера')
 @pytest.fixture(params=['firefox', 'chrome'])
 def driver(request):
     browser = request.param
@@ -39,26 +41,32 @@ def driver(request):
     # Завершение работы драйвера
     driver_instance.quit() # type: ignore
 
+@allure.step('Фикстура: инициализация объекта класса LoginPage')
 @pytest.fixture
 def login_page(driver):
     return LoginPage(driver)
 
+@allure.step('Фикстура: инициализация объекта класса ProfilePage')
 @pytest.fixture
 def profile_page(driver):
     return ProfilePage(driver)
 
+@allure.step('Фикстура: инициализация объекта класса ForgotPasswordPage')
 @pytest.fixture
 def forgot_password_page(driver):
     return ForgotPasswordPage(driver)
 
+@allure.step('Фикстура: инициализация объекта класса MainPage')
 @pytest.fixture
 def main_page(driver):
     return MainPage(driver)
 
+@allure.step('Фикстура: инициализация объекта класса OrderFeedPage')
 @pytest.fixture
 def order_feed_page(driver):
     return OrderFeedPage(driver)
 
+@allure.step('Фикстура: создание нового пользователя через API сервиса')
 @pytest.fixture
 def create_user():
     """

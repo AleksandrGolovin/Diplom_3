@@ -13,7 +13,7 @@ class ProfilePage(BasePage):
         self.click_to_element(ProfilePageLocators.LINK_HISTORY)
         self.wait_for_invisibility(ProfilePageLocators.DIV_LOADING)
     
-    @allure.step('Результат отображения истории заказов')    
+    @allure.step('Статус проверки, что история заказов отображается')    
     def is_orders_history_displayed(self):
         if self.find_invisible_element(ProfilePageLocators.DIV_ORDER_HISTORY):
             return True

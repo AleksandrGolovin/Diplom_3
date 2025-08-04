@@ -8,11 +8,12 @@ from data import URL
 class ForgotPasswordPage(BasePage):
     BASE_URL = URL.FORGOT_PASSWORD_PAGE
     
-    @allure.step('Клик на вопрос')
+    @allure.step('Ввод адреса электронной почты')
     def enter_email(self, email=None):
         email = email or generate_unique_email()
         self.set_text_to_element(ForgotPasswordPageLocators.INPUT_EMAIL, email)
-        
+    
+    @allure.step('Переход на страницу reset password по клику на кнопку')
     def navigate_to_reset_password_page(self):
         self.click_to_element(ForgotPasswordPageLocators.BUTTON_SUBMIT_RESTORE)
         

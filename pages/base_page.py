@@ -23,11 +23,11 @@ class BasePage:
             raise UnboundLocalError
 
     def go_to_url(self, url):
-        "Перейти на страницу по адресу"
+        """Перейти на страницу по адресу"""
         self.driver.get(url)
 
     def find_visible_element(self, locator):
-        "Найти элемент на странице"
+        """Найти visible-элемент на странице"""
         try:
             element = self.wait_for_visibility(locator)
             return element
@@ -35,7 +35,7 @@ class BasePage:
             return None
 
     def find_invisible_element(self, locator):
-        "Найти элемент на странице"
+        """Найти invisible-элемент на странице"""
         try:
             element = self.wait.until(ec.presence_of_element_located(locator))
             return element
@@ -43,9 +43,11 @@ class BasePage:
             return None
     
     def wait_for_visibility(self, locator):
+        """Ожидание отображение элемента"""
         return self.wait.until(ec.visibility_of_element_located(locator))
         
     def wait_for_invisibility(self, locator):
+        """Ожидание сокрытия элемента"""
         return self.wait.until(ec.invisibility_of_element_located(locator))
     
     def scroll_to_element(self, locator):
@@ -68,27 +70,18 @@ class BasePage:
             self.driver.execute_script("arguments[0].click();", element)
 
     def set_text_to_element(self, locator, text):
-        "Передать текст в элемент ввода"
+        """Передать текст в элемент ввода"""
         element = self.find_visible_element(locator)
         if element:
             element.send_keys(text)
     
     def get_text_from_element(self, locator):
-        "Получить текст элемента"
+        """Получить текст элемента"""
         element = self.find_visible_element(locator)
         if element:
             text = element.text
             return text
         return None
-        
-    def switch_to_last_tab(self):
-        "Переключиться на последнюю вкладку"
-        windows = self.driver.window_handles
-        self.driver.switch_to.window(windows[-1])
-
-    def wait_for_url(self, url_part):
-        "Подождать загрузки URL, в котором содержится искомый фрагмент"
-        self.wait.until(ec.url_contains(url_part))
 
     def _verify_page_loaded(self) -> bool:
         """Метод для проверки загрузки страницы (требует переопределения)"""
