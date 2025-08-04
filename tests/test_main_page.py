@@ -1,4 +1,5 @@
 import allure
+import pytest
 
 
 @allure.title('Тестовые сценарии главной страницы')
@@ -43,11 +44,12 @@ class TestMainPage:
 
     @allure.title('Проверка создания заказа')
     @allure.description('')
-    def test_main_page_create_order_auth_success(self, create_user, login_page):
+    @pytest.mark.parametrize('ingredient_count', [0, 1, 3])
+    def test_main_page_create_order_auth_success(self, ingredient_count, create_user, login_page):
         email, password = create_user()
         login_page.open()        
         main_page = login_page.auth(email, password)
-        is_success, order_number = main_page.create_new_order()
+        is_success, order_number = main_page.create_new_order(ingredient_count)
 
         assert all([
             is_success,  # По таймауту может не успеть?

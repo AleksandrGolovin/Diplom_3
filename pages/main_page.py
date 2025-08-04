@@ -77,18 +77,20 @@ class MainPage(BasePage):
     def add_ingredient_to_order(self, type='bun'):
         locator_from = self._get_random_ingredient_locator(type)
         ingredint_count_locator = locator_from[0], f'{locator_from[1]}/div[1]/p'
-        ingredient_count_before = self.get_text_from_element(ingredint_count_locator)
+        ingredient_count_before = self.get_text_from_element(ingredint_count_locator)  # На пустом бургере == 0 
         locator_to = MainPageLocators.SECTION_CONSTRUCTOR_BASKET
         self.drag_and_drop_element(locator_from, locator_to)
-        ingredient_count_after = self.get_text_from_element(ingredint_count_locator)
+        ingredient_count_after = self.get_text_from_element(ingredint_count_locator)  # Изменится после добавления (+1 или +2)
+        # Проверяем, что число ингредиентов изменилось
         if ingredient_count_before and ingredient_count_after:
             return int(ingredient_count_after) > int(ingredient_count_before)
         else:
-            return False
+            raise AssertionError
 
-    def create_new_order(self):
+    def create_new_order(self, ingredient_count = 1):
         self.add_ingredient_to_order('bun')
-        self.add_ingredient_to_order('ingredient')
+        for i in range(ingredient_count):
+            self.add_ingredient_to_order('ingredient')
         self.click_to_element(MainPageLocators.BUTTON_CREATE_ORDER)
         self.wait_for_visibility(MainPageLocators.IMG_TICK_ANIMATION)
         number_locator = MainPageLocators.H2_ORDER_NUMBER_TITLE
