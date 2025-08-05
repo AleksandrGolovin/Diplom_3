@@ -1,9 +1,13 @@
 class URL:
-    MAIN_PAGE = 'https://stellarburgers.nomoreparties.site/'
-    LOGIN_PAGE = 'https://stellarburgers.nomoreparties.site/login'
-    PROFILE_PAGE = 'https://stellarburgers.nomoreparties.site/account/profile'
-    ORDER_FEED_PAGE = 'https://stellarburgers.nomoreparties.site/feed'
-    REGISTER_PAGE = 'https://stellarburgers.nomoreparties.site/register'
-    FORGOT_PASSWORD_PAGE = 'https://stellarburgers.nomoreparties.site/forgot-password'
-    RESET_PASSWORD_PAGE = 'https://stellarburgers.nomoreparties.site/reset-password'
-    API_AUTH = 'https://stellarburgers.nomoreparties.site/api/auth'
+    # Базовый адрес сервиса
+    BASE_URL = 'https://stellarburgers.nomoreparties.site'
+    # Конечные точки
+    MAIN_PAGE = f'{BASE_URL}'
+    LOGIN_PAGE = f'{BASE_URL}/login'
+    PROFILE_PAGE = f'{BASE_URL}/account/profile'
+    ORDER_FEED_PAGE = f'{BASE_URL}/feed'
+    REGISTER_PAGE = f'{BASE_URL}/register'
+    FORGOT_PASSWORD_PAGE = f'{BASE_URL}/forgot-password'
+    RESET_PASSWORD_PAGE = f'{BASE_URL}/reset-password'
+    # Эндпоинт авторизации
+    API_AUTH = f'{BASE_URL}/api/auth'
