@@ -81,19 +81,21 @@
 
 ### Запуск тестов
 Выполните команду:  
-> `pytest --alluredir=allure_results`
+> `pytest --alluredir=allure-results`
 
 ### Просмотр отчета Allure
 1. Запустите сервер с отчетом:  
-> `allure serve allure_results`
+> `allure serve allure-results`
 
 2. Для генерации статического отчета:  
-> `allure generate allure_results -o allure_report --clean`
+> `allure generate allure_results -o allure-report --clean`
 
-После этого откройте файл `allure_report/index.html` в браузере.
+После этого откройте файл `allure-report/index.html` в браузере командой:
+> `allure open`
 
 ## Структура проекта
 Основные компоненты проекта:
+```
 Diplom_3/
 ├── locators/              # Локаторы элементов
 ├── pages/                 # Page Object Model
@@ -102,5 +104,5 @@ Diplom_3/
 ├── data.py                # URL и константы
 ├── helpers.py             # Вспомогательные функции
 └── requirements.txt       # Зависимости
-
+```
 Тесты проверяют как базовую функциональность интерфейса, так и комплексные пользовательские сценарии с интеграцией между разными разделами приложения.
